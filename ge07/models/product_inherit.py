@@ -8,4 +8,7 @@ class ProductInherit(models.Model):
     @api.depends('model','make','year')
     def _compute_from_model_make_year(self):
         for record in self:
-            record.name= str(record.model)+str(record.make)+str(record.year)
+            if record.detailed_type=='motorcycle':
+                record.name= str(record.year)+" "+str(record.make)+" "+str(record.model)
+            else:
+                record.name=""
