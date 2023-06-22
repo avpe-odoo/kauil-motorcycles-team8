@@ -9,7 +9,7 @@ class Picking(models.Model):
             lot_record = (
                 self.env["stock.move.line"]
                 .search([("picking_id", "=", self.id)])
-                .lot_id.name
+                .lot_id
             )
             self.env["motorcycle.registry"].create(
                 {
