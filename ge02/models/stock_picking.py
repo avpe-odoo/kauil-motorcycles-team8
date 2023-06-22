@@ -11,11 +11,14 @@ class Picking(models.Model):
                 .search([("picking_id", "=", self.id)])
                 .lot_id
             )
-            self.env["motorcycle.registry"].create(
-                {
-                    "vin": lot_record.name,
-                    "owner_id": self.partner_id.id,
-                    "lot_id": lot_record,
-                }
-            )
+            if not self.env["motorcycle.registry"].search(
+                [("vin", "=", lot_record.name)]
+            ):
+                self.env["motorcycle.registry"].create(
+                    {
+                        "vin": lot_record.name,
+                        "owner_id": self.partner_id.id,
+                        "lot_id": lot_record,
+                    }
+                )
         return super(Picking, self).button_validate()
