@@ -1,0 +1,1 @@
+from . import stock_lot, motorcycle_registry, stock_picking

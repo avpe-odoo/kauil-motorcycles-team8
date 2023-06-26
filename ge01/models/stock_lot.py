@@ -8,7 +8,8 @@ class StockLot(models.Model):
     def _get_next_serial(self, company, product):
         product_type = product.product_tmpl_id.detailed_type
         if product.tracking != "none" and product_type == "motorcycle":
-            prefix = product.make + product.model + str(product.year)[-2:]
-            return prefix + self.env["ir.sequence"].next_by_code("stock.lot.serial")
+            prefix = product.make + product.model + str(product.year)[-2:]+str(product.battery_capacity).upper()
+            serial_number=str(self.env['ir.sequence'].next_by_code('stock.lot.serial'))[1:]
+            return prefix + serial_number
         else:
             return super(StockLot, self)._get_next_serial(company, product)
