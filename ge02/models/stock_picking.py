@@ -13,8 +13,8 @@ class Picking(models.Model):
                     if move.product_id.product_tmpl_id.detailed_type == "motorcycle":
                         self.env["motorcycle.registry"].create(
                             {
-                                "owner_id": picking.partner_id.id,
                                 "lot_ids": [Command.link(move.lot_id.id)],
+                                "sale_order": picking.sale_id.id,
                             }
                         )
         return res

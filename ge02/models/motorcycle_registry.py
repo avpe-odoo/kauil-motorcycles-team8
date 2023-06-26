@@ -20,7 +20,13 @@ class MotorcycleRegistry(models.Model):
         store=True,
     )
 
+    sale_order = fields.Many2one(
+        comodel_name="sale.order",
+        string="Sale Order",
+    )
+
     vin = fields.Char(related="lot_id.name")
+    owner_id = fields.Many2one(related="sale_order.partner_id")
 
     @api.depends("lot_ids")
     def _compute_lot_id(self):
