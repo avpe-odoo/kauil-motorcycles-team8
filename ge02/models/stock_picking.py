@@ -1,24 +1,20 @@
-from odoo import api, fields, models
+from odoo import api, fields, models, Command
 
 
 class Picking(models.Model):
     _inherit = "stock.picking"
 
     def button_validate(self):
-        if self.env["sale.order"].search([("name", "=", self.origin)]).state == "sale":
-            lot_record = (
-                self.env["stock.move.line"]
-                .search([("picking_id", "=", self.id)])
-                .lot_id
-            )
-            if not self.env["motorcycle.registry"].search(
-                [("vin", "=", lot_record.name)]
-            ):
-                self.env["motorcycle.registry"].create(
-                    {
-                        "vin": lot_record.name,
-                        "owner_id": self.partner_id.id,
-                        "lot_id": lot_record,
-                    }
-                )
-        return super(Picking, self).button_validate()
+        res = super(Picking, self).button_validate()
+        for picking in self:
+            state = self.env["sale.order"].search([("name", "=", picking.origin)]).state
+            if state == "sale":
+                for move in picking.move_line_ids:
+                    if move.product_id.product_tmpl_id.detailed_type == "motorcycle":
+                        self.env["motorcycle.registry"].create(
+                            {
+                                "owner_id": picking.partner_id.id,
+                                "lot_ids": [Command.link(move.lot_id.id)],
+                            }
+                        )
+        return res
