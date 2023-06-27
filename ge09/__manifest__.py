@@ -5,9 +5,13 @@
     "license": "LGPL-3",
     "category": "Kawiil",
     "depends": [
+        "sale",
         "motorcycle_registry",
     ],
-    "data": [],
+    "data": [
+        'data/pricelist.xml',
+        'views/sale_order_views.xml',
+    ],
     "demo": [],
     "application": True,
 }
