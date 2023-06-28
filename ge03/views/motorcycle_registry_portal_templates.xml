@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Breadcrumbs -->
+    <template id="portal_my_home_menu_motorcycle_registry" inherit_id="portal.portal_breadcrumbs">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="motorcycles or motorcycle" t-attf-class="breadcrumb-item active">
+                <a t-if="motorcycle" t-attf-href="/my/motorcycles?{{ keep_query() }}">Motorcycle
+                    Registry</a>
+                <t t-else="">Motorcycle Registry</t>
+            </li>
+            <li t-if="motorcycle" class="breadcrumb-item active">
+                <span t-field="motorcycle.registry_number" />
+            </li>
+        </xpath>
+    </template>
+
+    <!-- Menu Item -->
+    <template id="portal_my_home_motorcycle_registry" customize_show="True"
+        inherit_id="portal.portal_my_home">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Motorcycle Registry</t>
+                <t t-set="url" t-value="'/my/motorcycles'" />
+                <t t-set="placeholder_count" t-value="'motorcycle_count'" />
+            </t>
+        </xpath>
+    </template>
+
+    <!-- List View -->
+    <template id="portal_my_motorcycles" name="Motorcycle Registry">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True" />
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Motorcycles</t>
+            </t>
+            <t t-if="motorcycles" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Registry Number</th>
+                        <th class="text-end">VIN</th>
+                        <th class="text-end">Brand</th>
+                        <th class="text-end">Make</th>
+                        <th class="text-end">Model</th>
+                        <th class="text-end">License Plate Number</th>
+                        <th class="text-end">Owner</th>
+                        <th class="text-end">State</th>
+                        <th class="text-end">Country</th>
+                    </tr>
+                </thead>
+                <t t-foreach="motorcycles" t-as="motorcycle">
+                    <tr>
+                        <td>
+                            <a t-att-href="motorcycle.get_portal_url()">
+                                <t t-out="motorcycle.registry_number" />
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="motorcycle.vin" />
+                        </td>
+                        <td class="text-end">
+                            <span t-field="motorcycle.brand" />
+                        </td>
+                        <td class="text-end">
+                            <span t-field="motorcycle.make" />
+                        </td>
+                        <td class="text-end">
+                            <span t-field="motorcycle.model" />
+                        </td>
+                        <td class="text-end">
+                            <span t-field="motorcycle.license_plate" />
+                        </td>
+                        <td class="text-end">
+                            <span t-field="motorcycle.owner_id.name" />
+                        </td>
+                        <td class="text-end">
+                            <span t-field="motorcycle.owner_id.state_id.name" />
+                        </td>
+                        <td class="text-end">
+                            <span t-field="motorcycle.owner_id.country_id.name" />
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no motorcycles for your account.</p>
+        </t>
+    </template>
+
+    <!-- Form View -->
+    <template id="motorcycle_registry_portal_template" name="Motorcycle Registry"
+        inherit_id="portal.portal_sidebar" primary="True">
+        <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+            <t t-set="o_portal_fullwidth_alert">
+                <t t-call="portal.portal_back_in_edit_mode" />
+            </t>
+            <h2 class="mt-2">
+                <b t-field="motorcycle.registry_number" />
+            </h2>
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <b>Motorcycle Information</b>
+                    </h5>
+                    <ul class="list-group" style="list-style:none">
+                        <li>
+                            <b>Registration Date: </b>
+                            <span t-field="motorcycle.registry_date" />
+                        </li>
+                        <li>
+                            <b>VIN: </b>
+                            <span t-field="motorcycle.vin" />
+                        </li>
+                        <li>
+                            <b>Brand: </b>
+                            <span t-field="motorcycle.brand" />
+                        </li>
+                        <li>
+                            <b>Make: </b>
+                            <span t-field="motorcycle.make" />
+                        </li>
+                        <li>
+                            <b>Model: </b>
+                            <span t-field="motorcycle.model" />
+                        </li>
+                        <li>
+                            <b>Current Mileage: </b>
+                            <span t-field="motorcycle.current_mileage" />
+                        </li>
+                        <li>
+                            <b>License Plate Number: </b>
+                            <span t-field="motorcycle.license_plate" />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <b>Owner Information</b>
+                    </h5>
+                    <ul class="list-group" style="list-style:none">
+                        <li>
+                            <b>Owner: </b>
+                            <span t-field="motorcycle.owner_id.name" />
+                        </li>
+                        <li>
+                            <b>Phone: </b>
+                            <span t-field="motorcycle.owner_id.phone" />
+                        </li>
+                        <li>
+                            <b>Email: </b>
+                            <span t-field="motorcycle.owner_id.email" />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>
