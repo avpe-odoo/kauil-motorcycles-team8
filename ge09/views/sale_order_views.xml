@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="ge9_form_inherit_sale" model="ir.ui.view">
+        <field name="name">ge9.form.inherit.sale</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_confirm']" position="after">
+                <button name="action_new_customer" string="New Customer Discount" type="object" states="draft" class="btn-primary"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
