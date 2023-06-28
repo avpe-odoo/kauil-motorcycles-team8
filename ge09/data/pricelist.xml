@@ -12,8 +12,8 @@
             <field name="base">list_price</field>
             <field name="compute_price">formula</field>
             <field name="pricelist_id" ref="sequence_registry"/>
-            <field name="price_discount">0</field>
-            <field name="price_surcharge">-2500</field>
+            <field name="percent_price">50</field>
+            <!-- <field name="price_surcharge">-2500</field> -->
             <field name="product_tmpl_id">1</field>
         </record>
     </data>
