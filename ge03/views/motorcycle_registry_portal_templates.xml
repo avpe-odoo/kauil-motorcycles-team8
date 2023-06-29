@@ -134,7 +134,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="card">
+            <div class="card mb-2">
                 <div class="card-body">
                     <h5 class="card-title">
                         <b>Owner Information</b>
@@ -151,6 +151,26 @@
                         <li>
                             <b>Email: </b>
                             <span t-field="motorcycle.owner_id.email" />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <b>Additional Information</b>
+                    </h5>
+                    <ul class="list-group" style="list-style:none">
+                        <li>
+                            <iframe name="frame" style="display:none" />
+                            <form action="/my/motorcycles/submit" method="post" target="frame">
+                                <b>Is Public?: </b>
+                                <input name="id" t-att-value="motorcycle.id" hidden="true" />
+                                <input t-if="motorcycle.is_public" type="checkbox" name="is_public"
+                                    checked="true" />
+                                <input t-else="" type="checkbox" name="is_public" />
+                                <input type="submit" value="Save" />
+                            </form>
                         </li>
                     </ul>
                 </div>

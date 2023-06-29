@@ -8,18 +8,24 @@ from odoo.addons.portal.controllers.portal import pager as portal_pager
 class MotorcycleRegistryPortal(portal.CustomerPortal):
     def _prepare_home_portal_values(self, counters):
         values = super()._prepare_home_portal_values(counters)
-
-        # TODO: Search all public records
+        domain = self._prepare_motorcycle_registry_domain(request.env.user.partner_id)
 
         MotorcycleRegistry = request.env["motorcycle.registry"]
         if "motorcycle_count" in counters:
             values["motorcycle_count"] = (
-                MotorcycleRegistry.search_count([])
+                MotorcycleRegistry.search_count(domain)
                 if MotorcycleRegistry.check_access_rights("read", raise_exception=False)
                 else 0
             )
 
         return values
+
+    def _prepare_motorcycle_registry_domain(self, partner):
+        return [
+            "|",
+            ("owner_id", "=", partner.id),
+            ("is_public", "=", True),
+        ]
 
     def _get_motorcycle_registry_searchbar_sortings(self):
         return {
@@ -44,7 +50,7 @@ class MotorcycleRegistryPortal(portal.CustomerPortal):
         values = self._prepare_portal_layout_values()
 
         url = "/my/motorcycles"
-        domain = []
+        domain = self._prepare_motorcycle_registry_domain(request.env.user.partner_id)
 
         searchbar_sortings = self._get_motorcycle_registry_searchbar_sortings()
         sort_order = searchbar_sortings[sortby]["order"]
@@ -126,3 +132,19 @@ class MotorcycleRegistryPortal(portal.CustomerPortal):
         )
 
         return request.render("ge03.motorcycle_registry_portal_template", values)
+
+    @http.route(
+        "/my/motorcycles/submit",
+        type="http",
+        methods=["POST"],
+        auth="public",
+        website=True,
+        csrf=False,
+    )
+    def test_path(self, **kwargs):
+        motorcycle_id = kwargs.get("id")
+        is_public = kwargs.get("is_public") != None
+
+        request.env["motorcycle.registry"].search([("id", "=", motorcycle_id)]).write(
+            {"is_public": is_public}
+        )
